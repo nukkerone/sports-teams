@@ -21,6 +21,7 @@ Route::prefix('teams')->group(function() {
     Route::get('', 'TeamController@index');
     Route::post('', 'TeamController@create');
     Route::put('{id}', 'TeamController@update');
+    Route::delete('{id}', 'TeamController@delete');
 
     Route::get('{id}/players', 'TeamController@getPlayers');
 });

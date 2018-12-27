@@ -20,6 +20,7 @@ import router from './routes';
 Vue.component('base-component', require('./components/BaseComponent').default);
 Vue.component('navigation-component', require('./components/NavigationComponent').default);
 Vue.component('teams-component', require('./components/TeamsComponent').default);
+Vue.component('players-component', require('./components/PlayersComponent').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

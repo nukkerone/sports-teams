@@ -29,6 +29,13 @@ class TeamController extends Controller
         return $team;
     }
 
+    public function delete($id) {
+        $team = Team::query()->find($id);
+        $team->delete();
+
+        return Team::query()->with('players')->get();
+    }
+
     public function getPlayers($id) {
         $team = Team::query()->find($id);
 

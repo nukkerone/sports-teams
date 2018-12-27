@@ -5,32 +5,22 @@
         app
     >
         <v-list dense>
-            <v-list-tile @click="navigate('home')">
+
+            <v-list-tile @click="navigate('teams')">
                 <v-list-tile-action>
-                    <v-icon>home</v-icon>
+                    <v-icon>chrome_reader_mode</v-icon>
                 </v-list-tile-action>
                 <v-list-tile-content>
-                    <v-list-tile-title>Home</v-list-tile-title>
+                    <v-list-tile-title>Teams</v-list-tile-title>
                 </v-list-tile-content>
             </v-list-tile>
 
-            <v-subheader>Redmine Data</v-subheader>
-
-            <v-list-tile @click="navigate('redmine-clients')">
+            <v-list-tile @click="navigate('players')">
                 <v-list-tile-action>
-                    <v-icon>assignment_ind</v-icon>
+                    <v-icon>people</v-icon>
                 </v-list-tile-action>
                 <v-list-tile-content>
-                    <v-list-tile-title>Clients</v-list-tile-title>
-                </v-list-tile-content>
-            </v-list-tile>
-
-            <v-list-tile @click="navigate('redmine-projects')">
-                <v-list-tile-action>
-                    <v-icon>assignment_ind</v-icon>
-                </v-list-tile-action>
-                <v-list-tile-content>
-                    <v-list-tile-title>Projects</v-list-tile-title>
+                    <v-list-tile-title>Players</v-list-tile-title>
                 </v-list-tile-content>
             </v-list-tile>
         </v-list>
@@ -40,16 +30,15 @@
 <script>
     export default {
         data () {
-            return {
-                items: [
-                    { title: 'Teams', icon: 'chrome_reader_mode' },
-                    { title: 'Players', icon: 'people' }
-                ],
-                right: null,
-            }
+            return {};
         },
         props: {
             drawer: Boolean
         },
+        methods: {
+            navigate(to) {
+                this.$router.push(to);
+            }
+        }
     }
 </script>
