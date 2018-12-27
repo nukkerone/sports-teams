@@ -12,4 +12,26 @@ class TeamController extends Controller
 
         return $teams;
     }
+
+    public function create() {
+        $team = Team::create(request()->all());
+
+        return $team;
+    }
+
+    public function update($id) {
+        $team = Team::query()->find($id);
+
+        $team->fill(request()->all());
+
+        $team->save();
+
+        return $team;
+    }
+
+    public function getPlayers($id) {
+        $team = Team::query()->find($id);
+
+        return $team->players;
+    }
 }

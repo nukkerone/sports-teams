@@ -18,5 +18,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::prefix('teams')->group(function() {
-    Route::get('/', 'TeamController@index');
+    Route::get('', 'TeamController@index');
+    Route::post('', 'TeamController@create');
+    Route::put('{id}', 'TeamController@update');
+
+    Route::get('{id}/players', 'TeamController@getPlayers');
+});
+
+Route::prefix('players')->group(function() {
+   Route::get('', 'PlayerController@index');
+    Route::post('', 'PlayerController@create');
+    Route::put('{id}', 'PlayerController@update');
 });
