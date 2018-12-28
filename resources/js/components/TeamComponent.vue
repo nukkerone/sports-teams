@@ -1,9 +1,25 @@
 <template>
 
     <base-component :title="'Team'">
+        <v-snackbar
+            v-model="snackbar"
+            :right="1 === 1"
+            :timeout="2000"
+            :top="1 === 1"
+        >
+            {{ snackbarText }}
+            <v-btn
+                color="pink"
+                flat
+                @click="snackbar = false"
+            >
+                Close
+            </v-btn>
+        </v-snackbar>
+
         <v-toolbar class="mb-4">
 
-            <v-toolbar-title>Team: {{ this.$data._team ? this.$data._team.name : '-' }}</v-toolbar-title>
+            <v-toolbar-title>Team: {{ this.team ? this.team.name : '-' }}</v-toolbar-title>
 
             <v-spacer></v-spacer>
 
@@ -92,7 +108,7 @@
                 ],
                 loading: false,
                 drawer: true,
-                _team: null,
+                team: null,
                 dialog: false,
                 editedIndex: -1,
                 editedItem: {
@@ -102,12 +118,10 @@
                 defaultItem: {
                     first_name: '',
                     last_name: '',
-                }
+                },
+                snackbar: false,
+                snackbarText: '',
             }
-        },
-
-        props: {
-            team: null
         },
 
         mounted() {
@@ -115,14 +129,10 @@
                 let teamId = this.$route.params.id;
                 this.loading = true;
                 axios.get('/api/teams/' + teamId).then((response) => {
-                    this._team = response.data;
-                    this.players = this._team.players;
+                    this.team = response.data;
+                    this.players = this.team.players;
                     this.loading = false;
-                    console.log('Players ', this.players)
                 });
-            } else {
-                this._team = this.team;
-                this.players = this.team.players;
             }
         },
 
@@ -148,7 +158,7 @@
             deleteItem (item) {
                 const index = this.players.indexOf(item);
                 this.loading = true;
-                axios.delete('/api/teams/' + this._team.id + '/players/' + item.id).then((response) => {
+                axios.delete('/api/teams/' + this.team.id + '/players/' + item.id).then((response) => {
                     this.loading = false;
                     this.players.splice(index, 1);
                 });
@@ -165,18 +175,26 @@
             save () {
                 if (this.editedIndex > -1) {
                     this.loading = true;
-                    axios.put('/api/teams/' + this._team.id + '/players/' + this.editedItem.id, this.editedItem).then((response) => {
+                    axios.put('/api/teams/' + this.team.id + '/players/' + this.editedItem.id, this.editedItem).then((response) => {
                         Object.assign(this.players[this.editedIndex], response.data);
                         this.loading = false;
                         this.close()
+                    }).catch((error) => {
+                        this.loading = false;
+                        this.snackbarText = 'There was a problem saving the item';
+                        this.snackbar = true;
                     });
                 } else {
                     this.loading = true;
-                    axios.post('/api/teams/' + this._team.id + '/players', this.editedItem).then((response) => {
+                    axios.post('/api/teams/' + this.team.id + '/players', this.editedItem).then((response) => {
                         let createdTeam = response.data;
                         this.players.push(createdTeam);
                         this.loading = false;
                         this.close()
+                    }).catch((error) => {
+                        this.snackbarText = 'There was a problem saving the item';
+                        this.snackbar = true;
+                        this.loading = false;
                     });
                 }
             }

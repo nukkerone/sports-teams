@@ -26,7 +26,7 @@ class TeamController extends Controller
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|null
      */
     public function get($teamId) {
-        $team = Team::query()->with('players.team')->find($id);
+        $team = Team::query()->with('players.team')->find($teamId);
 
         return $team;
     }

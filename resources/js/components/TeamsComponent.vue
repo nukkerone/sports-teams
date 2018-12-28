@@ -1,6 +1,22 @@
 <template>
 
     <base-component title="Teams">
+        <v-snackbar
+            v-model="snackbar"
+            :right="1 === 1"
+            :timeout="2000"
+            :top="1 === 1"
+        >
+            {{ snackbarText }}
+            <v-btn
+                color="pink"
+                flat
+                @click="snackbar = false"
+            >
+                Close
+            </v-btn>
+        </v-snackbar>
+
         <v-toolbar class="mb-4">
 
             <v-toolbar-title>Teams</v-toolbar-title>
@@ -97,7 +113,9 @@
                 },
                 defaultItem: {
                     name: '',
-                }
+                },
+                snackbar: false,
+                snackbarText: '',
             }
         },
         mounted() {
@@ -155,6 +173,10 @@
                         Object.assign(this.teams[this.editedIndex], response.data);
                         this.loading = false;
                         this.close()
+                    }).catch((error) => {
+                        this.loading = false;
+                        this.snackbarText = 'There was a problem saving the item';
+                        this.snackbar = true;
                     });
                 } else {
                     this.loading = true;
@@ -163,6 +185,10 @@
                         this.teams.push(createdTeam);
                         this.loading = false;
                         this.close()
+                    }).catch((error) => {
+                        this.loading = false;
+                        this.snackbarText = 'There was a problem saving the item';
+                        this.snackbar = true;
                     });
                 }
             }

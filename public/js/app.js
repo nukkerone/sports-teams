@@ -2015,6 +2015,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2039,7 +2055,7 @@ __webpack_require__.r(__webpack_exports__);
       players: [],
       loading: false,
       drawer: true,
-      _team: null,
+      team: null,
       dialog: false,
       editedIndex: -1,
       editedItem: {
@@ -2049,11 +2065,10 @@ __webpack_require__.r(__webpack_exports__);
       defaultItem: {
         first_name: '',
         last_name: ''
-      }
+      },
+      snackbar: false,
+      snackbarText: ''
     };
-  },
-  props: {
-    team: null
   },
   mounted: function mounted() {
     var _this = this;
@@ -2062,14 +2077,10 @@ __webpack_require__.r(__webpack_exports__);
       var teamId = this.$route.params.id;
       this.loading = true;
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/teams/' + teamId).then(function (response) {
-        _this._team = response.data;
-        _this.players = _this._team.players;
+        _this.team = response.data;
+        _this.players = _this.team.players;
         _this.loading = false;
-        console.log('Players ', _this.players);
       });
-    } else {
-      this._team = this.team;
-      this.players = this.team.players;
     }
   },
   computed: {
@@ -2093,7 +2104,7 @@ __webpack_require__.r(__webpack_exports__);
 
       var index = this.players.indexOf(item);
       this.loading = true;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.delete('/api/teams/' + this._team.id + '/players/' + item.id).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.delete('/api/teams/' + this.team.id + '/players/' + item.id).then(function (response) {
         _this2.loading = false;
 
         _this2.players.splice(index, 1);
@@ -2113,15 +2124,19 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.editedIndex > -1) {
         this.loading = true;
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a.put('/api/teams/' + this._team.id + '/players/' + this.editedItem.id, this.editedItem).then(function (response) {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.put('/api/teams/' + this.team.id + '/players/' + this.editedItem.id, this.editedItem).then(function (response) {
           Object.assign(_this4.players[_this4.editedIndex], response.data);
           _this4.loading = false;
 
           _this4.close();
+        }).catch(function (error) {
+          _this4.loading = false;
+          _this4.snackbarText = 'There was a problem saving the item';
+          _this4.snackbar = true;
         });
       } else {
         this.loading = true;
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/teams/' + this._team.id + '/players', this.editedItem).then(function (response) {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/teams/' + this.team.id + '/players', this.editedItem).then(function (response) {
           var createdTeam = response.data;
 
           _this4.players.push(createdTeam);
@@ -2129,6 +2144,10 @@ __webpack_require__.r(__webpack_exports__);
           _this4.loading = false;
 
           _this4.close();
+        }).catch(function (error) {
+          _this4.snackbarText = 'There was a problem saving the item';
+          _this4.snackbar = true;
+          _this4.loading = false;
         });
       }
     }
@@ -2148,6 +2167,22 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2249,7 +2284,9 @@ __webpack_require__.r(__webpack_exports__);
       },
       defaultItem: {
         name: ''
-      }
+      },
+      snackbar: false,
+      snackbarText: ''
     };
   },
   mounted: function mounted() {
@@ -2310,6 +2347,10 @@ __webpack_require__.r(__webpack_exports__);
           _this4.loading = false;
 
           _this4.close();
+        }).catch(function (error) {
+          _this4.loading = false;
+          _this4.snackbarText = 'There was a problem saving the item';
+          _this4.snackbar = true;
         });
       } else {
         this.loading = true;
@@ -2321,6 +2362,10 @@ __webpack_require__.r(__webpack_exports__);
           _this4.loading = false;
 
           _this4.close();
+        }).catch(function (error) {
+          _this4.loading = false;
+          _this4.snackbarText = 'There was a problem saving the item';
+          _this4.snackbar = true;
         });
       }
     }
@@ -3801,13 +3846,41 @@ var render = function() {
     { attrs: { title: "Team" } },
     [
       _c(
+        "v-snackbar",
+        {
+          attrs: { right: 1 === 1, timeout: 2000, top: 1 === 1 },
+          model: {
+            value: _vm.snackbar,
+            callback: function($$v) {
+              _vm.snackbar = $$v
+            },
+            expression: "snackbar"
+          }
+        },
+        [
+          _vm._v("\n        " + _vm._s(_vm.snackbarText) + "\n        "),
+          _c(
+            "v-btn",
+            {
+              attrs: { color: "pink", flat: "" },
+              on: {
+                click: function($event) {
+                  _vm.snackbar = false
+                }
+              }
+            },
+            [_vm._v("\n            Close\n        ")]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
         "v-toolbar",
         { staticClass: "mb-4" },
         [
           _c("v-toolbar-title", [
-            _vm._v(
-              "Team: " + _vm._s(this.$data._team ? this.$data._team.name : "-")
-            )
+            _vm._v("Team: " + _vm._s(this.team ? this.team.name : "-"))
           ]),
           _vm._v(" "),
           _c("v-spacer"),
@@ -4031,6 +4104,36 @@ var render = function() {
     "base-component",
     { attrs: { title: "Teams" } },
     [
+      _c(
+        "v-snackbar",
+        {
+          attrs: { right: 1 === 1, timeout: 2000, top: 1 === 1 },
+          model: {
+            value: _vm.snackbar,
+            callback: function($$v) {
+              _vm.snackbar = $$v
+            },
+            expression: "snackbar"
+          }
+        },
+        [
+          _vm._v("\n        " + _vm._s(_vm.snackbarText) + "\n        "),
+          _c(
+            "v-btn",
+            {
+              attrs: { color: "pink", flat: "" },
+              on: {
+                click: function($event) {
+                  _vm.snackbar = false
+                }
+              }
+            },
+            [_vm._v("\n            Close\n        ")]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
       _c(
         "v-toolbar",
         { staticClass: "mb-4" },
