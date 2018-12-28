@@ -6,7 +6,7 @@
     >
         <v-list dense>
 
-            <v-list-tile @click="navigate('teams')">
+            <v-list-tile @click="navigate('/teams')">
                 <v-list-tile-action>
                     <v-icon>chrome_reader_mode</v-icon>
                 </v-list-tile-action>
@@ -15,7 +15,7 @@
                 </v-list-tile-content>
             </v-list-tile>
 
-            <v-list-tile @click="navigate('players')">
+            <v-list-tile @click="navigate('/players')">
                 <v-list-tile-action>
                     <v-icon>people</v-icon>
                 </v-list-tile-action>

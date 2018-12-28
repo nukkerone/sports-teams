@@ -43,6 +43,13 @@
                     <v-icon
                         small
                         class="mr-2"
+                        @click="viewItem(props.item)"
+                    >
+                        people
+                    </v-icon>
+                    <v-icon
+                        small
+                        class="mr-2"
                         @click="editItem(props.item)"
                     >
                         edit
@@ -73,7 +80,7 @@
                 headers: [
                     { text: 'ID', value: 'id' },
                     { text: 'Name', value: 'name' },
-                    { text: 'Actions', value: 'actions', sort: false },
+                    { text: 'Actions', value: 'actions', sortable: false },
                 ],
                 teams: [
 
@@ -93,7 +100,6 @@
         mounted() {
             this.loading = true;
             axios.get('/api/teams').then((response) => {
-                console.log('Teams ', response.data);
                 this.teams = JSON.parse(JSON.stringify(response.data));
                 this.loading = false;
             });
@@ -125,6 +131,10 @@
                     this.loading = false;
                     this.teams.splice(index, 1);
                 });
+            },
+
+            viewItem (item) {
+                this.$router.push('teams/' + item.id + '/players');
             },
 
             close () {

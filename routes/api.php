@@ -19,11 +19,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::prefix('teams')->group(function() {
     Route::get('', 'TeamController@index');
+    Route::get('{team_id}', 'TeamController@get');
     Route::post('', 'TeamController@create');
-    Route::put('{id}', 'TeamController@update');
-    Route::delete('{id}', 'TeamController@delete');
+    Route::put('{team_id}', 'TeamController@update');
+    Route::delete('{team_id}', 'TeamController@delete');
 
-    Route::get('{id}/players', 'TeamController@getPlayers');
+    Route::get('{team_id}/players', 'TeamController@getPlayers');
+    Route::post('{team_id}/players', 'TeamController@createPlayer');
+    Route::put('{team_id}/players/{player_id}', 'TeamController@updatePlayer');
+    Route::delete('{team_id}/players/{player_id}', 'TeamController@deletePlayer');
 });
 
 Route::prefix('players')->group(function() {
