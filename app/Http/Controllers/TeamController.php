@@ -8,26 +8,48 @@ use App\Team;
 
 class TeamController extends Controller
 {
+    /**
+     * Gets all the teams with their players
+     *
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     */
     public function index() {
         $teams = Team::query()->with('players')->get();
 
         return $teams;
     }
 
-    public function get($id) {
+    /**
+     * Gets a single team based on the id
+     *
+     * @param $teamId
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|null
+     */
+    public function get($teamId) {
         $team = Team::query()->with('players.team')->find($id);
 
         return $team;
     }
 
+    /**
+     * Creates a new team
+     *
+     * @return mixed
+     */
     public function create() {
         $team = Team::create(request()->all());
 
         return $team;
     }
 
-    public function update($id) {
-        $team = Team::query()->find($id);
+    /**
+     * Updates an existing team based on the id
+     *
+     * @param $teamId
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|null
+     */
+    public function update($teamId) {
+        $team = Team::query()->find($teamId);
 
         $team->fill(request()->all());
 
@@ -36,26 +58,52 @@ class TeamController extends Controller
         return $team;
     }
 
-    public function delete($id) {
-        $team = Team::query()->find($id);
+    /**
+     * Deletes a team based on the id
+     *
+     * @param $teamId
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     * @throws \Exception
+     */
+    public function delete($teamId) {
+        $team = Team::query()->find($teamId);
         $team->delete();
 
         return Team::query()->with('players')->get();
     }
 
-    public function getPlayers($id) {
+    /**
+     * Gets the players from a team
+     *
+     * @param $teamId
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function getPlayers($teamId) {
         $players = Player::query()->with('team')->where('team_id', '=', $id);
 
         return $players;
     }
 
-    public function createPlayer($id) {
-        $team = Team::query()->find($id);
+    /**
+     * Creates a new player for the team
+     *
+     * @param $teamId
+     * @return mixed
+     */
+    public function createPlayer($teamId) {
+        $team = Team::query()->find($teamId);
         $player = $team->players()->create(request()->all());
 
         return $player;
     }
 
+    /**
+     * Updates a player from the team
+     *
+     * @param $teamId
+     * @param $playerId
+     * @return mixed
+     */
     public function updatePlayer($teamId, $playerId) {
         $team = Team::query()->find($teamId);
         $player = $team->players()->find($playerId);
@@ -66,6 +114,12 @@ class TeamController extends Controller
         return $player;
     }
 
+    /**
+     * Deletes a player that's on the team
+     *
+     * @param $teamId
+     * @param $playerId
+     */
     public function deletePlayer($teamId, $playerId) {
         $team = Team::query()->find($teamId);
         $player = $team->players()->find($playerId);

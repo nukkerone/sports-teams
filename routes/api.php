@@ -33,5 +33,5 @@ Route::prefix('teams')->group(function() {
 Route::prefix('players')->group(function() {
    Route::get('', 'PlayerController@index');
     Route::post('', 'PlayerController@create');
-    Route::put('{id}', 'PlayerController@update');
+    Route::put('{$playerId}', 'PlayerController@update');
 });
