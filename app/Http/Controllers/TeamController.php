@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Player;
 use App\Team;
 
 class TeamController extends Controller
@@ -14,7 +15,7 @@ class TeamController extends Controller
     }
 
     public function get($id) {
-        $team = Team::query()->with('players')->find($id);
+        $team = Team::query()->with('players.team')->find($id);
 
         return $team;
     }
@@ -43,9 +44,9 @@ class TeamController extends Controller
     }
 
     public function getPlayers($id) {
-        $team = Team::query()->find($id);
+        $players = Player::query()->with('team')->where('team_id', '=', $id);
 
-        return $team->players;
+        return $players;
     }
 
     public function createPlayer($id) {

@@ -1,9 +1,12 @@
 <template>
 
     <base-component title="Teams">
-        <v-toolbar flat color="white">
+        <v-toolbar class="mb-4">
+
+            <v-toolbar-title>Teams</v-toolbar-title>
 
             <v-spacer></v-spacer>
+
             <v-dialog v-model="dialog" max-width="500px">
                 <v-btn slot="activator" color="primary" dark class="mb-2">New Item</v-btn>
                 <v-card>

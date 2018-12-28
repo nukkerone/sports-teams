@@ -1,9 +1,12 @@
 <template>
 
     <base-component :title="'Team'">
-        <v-toolbar flat color="white">
+        <v-toolbar class="mb-4">
+
+            <v-toolbar-title>Team: {{ this.$data._team ? this.$data._team.name : '-' }}</v-toolbar-title>
 
             <v-spacer></v-spacer>
+
             <v-dialog v-model="dialog" max-width="500px">
                 <v-btn slot="activator" color="primary" dark class="mb-2">New Item</v-btn>
                 <v-card>
@@ -34,6 +37,7 @@
             </v-dialog>
         </v-toolbar>
 
+
         <v-data-table
             :headers="headers"
             :items="players"
@@ -44,6 +48,7 @@
                 <td class="">{{ props.item.id }}</td>
                 <td class="">{{ props.item['first_name'] }}</td>
                 <td class="">{{ props.item['last_name'] }}</td>
+                <td class="">{{ props.item.team ? props.item.team.name : '-' }}</td>
                 <td class="justify-center layout px-0">
                     <v-icon
                         small
@@ -79,6 +84,7 @@
                     { text: 'ID', value: 'id' },
                     { text: 'First Name', value: 'first-name' },
                     { text: 'Last Name', value: 'last-name' },
+                    { text: 'Team', value: 'team.name' },
                     { text: 'Actions', value: 'actions', sortable: false },
                 ],
                 players: [
